@@ -1,18 +1,19 @@
-const express = require('express');
-const router = express.Router();
-
+const { router, cors, corsOptionsDelegate } = require('../app');
 const productController = require('../controllers/productController');
 
 // CRUD -> Create
-router.post('/', productController.createProduct)
+router.post('/', cors(corsOptionsDelegate), productController.createProduct)
 
 // CRUD -> Read
-router.get('/', productController.getProduct)
+router.get('/', cors(corsOptionsDelegate), productController.getProduct)
+
+// CRUD -> Read ID
+router.get('/:id', cors(corsOptionsDelegate), productController.getProductById)
 
 // CRUD -> Update
-router.put('/:id', productController.updateProduct)
+router.put('/:id', cors(corsOptionsDelegate), productController.updateProduct)
 
 // CRUD -> Delete
-router.delete('/:id', productController.deleteProduct)
+router.delete('/:id', cors(corsOptionsDelegate), productController.deleteProduct)
 
 module.exports = router;

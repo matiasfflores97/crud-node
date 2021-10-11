@@ -1,25 +1,13 @@
-const dotenv    = require('dotenv').config();
-const fetch     = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
+const { dotenv, fetch } = require('../app');
 const url   = `https://${process.env.SHOPIFY_APY_KEY}:${process.env.SHOPIFY_APY_SECRET}@test-matias.myshopify.com/admin/api/2021-07/products`
-
 
 // CRUD -> Create
 exports.createProduct = async (req,res) => {
-    let new_product = {
-        product: {
-            title: req.body.title,
-            body_html: req.body.body_html,
-            vendor: req.body.vendor,
-            product_type: req.body.product_type,
-            tags: req.body.tags
-        }
-    }
     let options = {
         method: 'POST',
         json: true,
         resolveWithFullResponse: true,
-        body: JSON.stringify(new_product),
+        body: JSON.stringify(req.body),
         headers: {
             'Content-Type': 'application/json',
             'X-Shopify-Access-Token': `${process.env.SHOPIFY_APY_SECRET}`
@@ -38,7 +26,7 @@ exports.createProduct = async (req,res) => {
 // CRUD -> Read
 exports.getProduct = async (req,res) => {
     let options = {
-        method: 'get',
+        method: 'GET',
         json: true,
         headers: {
             'Content-Type': 'application/json',
@@ -55,10 +43,30 @@ exports.getProduct = async (req,res) => {
     }
 }
 
+// CRUD -> Read product by ID
+exports.getProductById = async (req,res) => {
+    let options = {
+        method: 'GET',
+        json: true,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': `${process.env.SHOPIFY_APY_SECRET}`
+        }
+    }
+
+    try{
+        const response = await fetch(url + '/' + req.params.id + '.json', options);
+        const data = await response.json();
+        res.send(data)
+    }catch(err){
+        console.log(err)
+    }
+}
+
 // CRUD -> Update
 exports.updateProduct = async(req,res) => {
     let options = {
-        method: 'put',
+        method: 'PUT',
         json: true,
         body: JSON.stringify(req.body),
         headers: {
@@ -80,7 +88,7 @@ exports.updateProduct = async(req,res) => {
 // CRUD -> Delete
 exports.deleteProduct = async(req,res) => {
     let options = {
-        method: 'delete',
+        method: 'DELETE',
         json: true,
         headers: {
             'Content-Type': 'application/json',
