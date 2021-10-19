@@ -8,7 +8,7 @@ router.post('/:id/variants', cors(corsOptionsDelegate), variantController.create
 router.get('/:id/variants', cors(corsOptionsDelegate), variantController.getVariant)
 
 // CRUD -> Update
-router.put('/:id', cors(corsOptionsDelegate), variantController.updateVariant)
+router.put('/:id/variants/:v_id', cors(corsOptionsDelegate), variantController.updateVariant)
 
 // CRUD -> Delete
 router.delete('/:id/variants/:v_id', cors(corsOptionsDelegate), variantController.deleteVariant)
